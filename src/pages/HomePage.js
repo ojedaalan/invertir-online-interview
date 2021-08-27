@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react'
+import React, { useState } from 'react'
 import { Loading } from '../components/Loading';
 import { useCharacter } from '../hooks/useCharacter'
 
