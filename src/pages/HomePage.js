@@ -1,58 +1,40 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Loading } from '../components/Loading';
 import { useCharacter } from '../hooks/useCharacter'
 
 export const HomePage = () => {
+    const {
+        isLoading,
+        characters,
+        nextPage,
+        prevPage,
+        amountOfPages,
+        searchText,
 
-    const {isLoading, character} = useCharacter();
-    const [currentPage, setcurrentPage] = useState(0);
-    const [search, setSearch] = useState('');
-
-    const filteredCharacters = () => {
-        if(search.length === 0)
-        return character.slice(currentPage, currentPage + 15);
-        const filtered = character.filter( char => char.location.name.includes(search) );
-        return filtered.slice(currentPage, currentPage + 15);
+        onSearchTextChange
+    } = useCharacter();
     
-    
-    }
-    const nextPage= () => {
-        if (character.filter( char => char.location.name.includes(search) ).length > currentPage + 15)
-        setcurrentPage( currentPage + 15 );
-    }
-    const prevPage= () => {
-        if ( currentPage>0 )
-        setcurrentPage( currentPage - 15 );
-    }
-    const onSearchChange = ({target}) => {
-        setcurrentPage(0);
-        setSearch(target.value);
-
-
-    }
-
-
     return (
         <div className="mt-5">
             <h1>Listado de Personajes</h1>
-            <hr/>
-            <input 
+            <hr />
+            <input
                 type="text"
                 className="mb-2 form-control"
                 placeholder="Busqueda por locación"
-                value={search}
-                onChange={ onSearchChange }
-            
+                value={searchText}
+                onChange={onSearchTextChange}
+
             />
 
-            <button 
-            className="btn btn-primary"
-            onClick={prevPage}
+            <button
+                className="btn btn-primary"
+                onClick={prevPage}
             >
                 Anteriores
             </button>
             &nbsp;
-            <button 
+            <button
                 className="btn btn-primary"
                 onClick={nextPage}
             >
@@ -75,17 +57,15 @@ export const HomePage = () => {
                 <tbody>
 
                     {
-                       
-                        filteredCharacters().map( char => (
-                        
+                        characters.map(char => (
                             <tr key={char.id}>
                                 <td>{char.id}</td>
                                 <td>{char.name}</td>
                                 <td>
-                                    <img 
+                                    <img
                                         src={char.image}
                                         alt={char.name}
-                                        style={{ height:75 }}
+                                        style={{ height: 75 }}
                                     />
                                 </td>
                                 <td>{char.status}</td>
@@ -94,10 +74,10 @@ export const HomePage = () => {
                                 <td>{char.location.name}</td>
                             </tr>
                         ))
-                        
+
                     }
-                        
-                <tr>
+
+                    <tr>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -115,4 +95,4 @@ export const HomePage = () => {
 
         </div>
     )
-}
+        }

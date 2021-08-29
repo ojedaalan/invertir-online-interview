@@ -1,15 +1,20 @@
-import {characterApi} from '../api/characterApi';
+import { characterApi } from '../api/characterApi';
 
-export const fetchAllCharacters = async(i) => {
-    
-    
-    const resp = await characterApi.get('/character?page=' + i);
-     //console.log(resp.data.results);
-     //console.log(resp.data.info.pages);
-      
-    const characterList = resp.data.results;
+export const fetchAllCharacters = async () => {
 
-    const character = characterList.map( value =>{
+    let page = 1;
+    const resp = await characterApi.get('/character?page=' + page);
+
+    let characterList = resp.data.results;
+
+    for (let i = 2; i <= resp.data.info.pages; i++) {
+        const response = await characterApi.get('/character?page=' + i);
+        const newCharacters = response.data.results;
+        characterList = characterList.concat(newCharacters);
+    }
+
+
+    const characters = characterList.map(value => {
         return {
             id: value.id,
             name: value.name,
@@ -18,18 +23,13 @@ export const fetchAllCharacters = async(i) => {
             species: value.species,
             origin: value.origin,
             location: value.location,
-            list: i
-    
+            list: page
+
         }
-    
-    
+
+
     })
 
 
-//    console.log(character);
-    return character;
+    return characters 
 }
-
-
-
-
